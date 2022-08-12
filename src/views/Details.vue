@@ -4,22 +4,24 @@
       <h3>{{ post.title }}</h3>
       <p>{{ post.body }}</p>
     </div>
+    <div v-else><Spinner /></div>
   </div>
 </template>
 
 <script>
 import getPost from "@/composables/getPost";
 import { onMounted } from "@vue/runtime-core";
+import Spinner from "@/components/Spinner.vue";
 export default {
   props: ["id"],
   setup(props) {
     const { post, error, fetchPost } = getPost(props.id);
-
     onMounted(() => {
       fetchPost();
     });
     return { post, error };
   },
+  components: { Spinner },
 };
 </script>
 

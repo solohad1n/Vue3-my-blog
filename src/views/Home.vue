@@ -4,7 +4,7 @@
       <PostsList :posts="posts" />
     </div>
     <div v-else>
-      <p>Нет постов (((</p>
+      <p><Spinner /></p>
     </div>
   </div>
 </template>
@@ -13,6 +13,7 @@
 import PostsList from "@/components/PostsList.vue";
 import { onMounted } from "@vue/runtime-core";
 import getPosts from "@/composables/getPosts";
+import Spinner from "@/components/Spinner.vue";
 export default {
   setup() {
     const { posts, error, fetchPosts } = getPosts();
@@ -23,7 +24,7 @@ export default {
 
     return { posts };
   },
-  components: { PostsList },
+  components: { PostsList, Spinner },
 };
 </script>
 
