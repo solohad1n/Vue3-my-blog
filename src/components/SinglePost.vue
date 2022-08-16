@@ -4,7 +4,7 @@
       ><h3>{{ post.title }}</h3></router-link
     >
     <p>{{ bodyLimit }}</p>
-    <span v-for="tag in post.tags" :key="tag">#{{ tag }}</span>
+    <span class="pill" v-for="tag in post.tags" :key="tag">#{{ tag }}</span>
   </div>
 </template>
 

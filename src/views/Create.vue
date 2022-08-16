@@ -6,7 +6,7 @@
       <label>Контент:</label>
       <textarea v-model="body"></textarea>
       <label>Теги (Нажмите на Enter чтобы добавить тег)</label>
-      <input @keydown.enter="handleAddTag" v-model="tag" type="text" />
+      <input @keydown.enter.prevent="handleAddTag" v-model="tag" type="text" />
       <div v-for="tag in tags" :key="tag" class="pill">
         <span @click="handleDeleteTag(tag)">#{{ tag }}</span>
       </div>
@@ -17,12 +17,14 @@
 
 <script>
 import { ref } from "@vue/reactivity";
+import {useRouter} from 'vue-router'
 export default {
   setup() {
     const title = ref("");
     const body = ref("");
     const tag = ref("");
     const tags = ref([]);
+    const router = useRouter()
 
     const handleAddTag = () => {
       if (!tags.value.includes(tag.value) && !tag.value.includes(" ")) {
@@ -32,10 +34,22 @@ export default {
       tag.value = "";
     };
 
-    const handleSubmit = (item) => {
-      console.log(title.value);
-      console.log(body.value);
-      console.log(tag.value);
+    const handleSubmit = async () => {
+      const newPost = {
+        title: title.value,
+        body: body.value,
+        tags: tags.value,
+      };
+      try {
+        await fetch(`http://localhost:3000/posts`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newPost),
+        });
+        router.push('/')
+      } catch (err) {
+        console.log(err.message)
+      }
     };
 
     const handleDeleteTag = (item) => {
