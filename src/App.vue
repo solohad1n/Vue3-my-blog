@@ -1,6 +1,14 @@
 <template>
+  <Navbar />
   <router-view />
 </template>
+
+<script>
+import Navbar from "./components/Navbar.vue";
+export default {
+  components: { Navbar },
+};
+</script>
 
 <style lang="scss">
 #app {
@@ -13,5 +21,8 @@
   max-width: 1200px;
   margin: auto;
   padding: 10px;
+}
+body {
+  margin: 0;
 }
 </style>

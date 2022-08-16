@@ -10,6 +10,7 @@
       <div v-for="tag in tags" :key="tag" class="pill">
         <span @click="handleDeleteTag(tag)">#{{ tag }}</span>
       </div>
+      <div v-if="error">{{ error }}</div>
       <button>создать</button>
     </form>
   </div>
@@ -17,14 +18,15 @@
 
 <script>
 import { ref } from "@vue/reactivity";
-import {useRouter} from 'vue-router'
+import { useRouter } from "vue-router";
 export default {
   setup() {
     const title = ref("");
     const body = ref("");
     const tag = ref("");
     const tags = ref([]);
-    const router = useRouter()
+    const router = useRouter();
+    const error = ref(null);
 
     const handleAddTag = () => {
       if (!tags.value.includes(tag.value) && !tag.value.includes(" ")) {
@@ -46,9 +48,9 @@ export default {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(newPost),
         });
-        router.push('/')
+        router.push("/");
       } catch (err) {
-        console.log(err.message)
+        error.value = err.message;
       }
     };
 
@@ -64,6 +66,7 @@ export default {
       handleSubmit,
       handleAddTag,
       handleDeleteTag,
+      error,
     };
   },
 };
