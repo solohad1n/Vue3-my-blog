@@ -1,20 +1,58 @@
 <template>
   <div class="create">
-    <form>
+    <form @submit.prevent="handleSubmit">
       <label>Заголовок</label>
-      <input type="text" required />
+      <input v-model="title" type="text" required />
       <label>Контент:</label>
-      <textarea></textarea>
+      <textarea v-model="body"></textarea>
       <label>Теги (Нажмите на Enter чтобы добавить тег)</label>
-      <input type="text" />
-      <div class="pill">CSS</div>
+      <input @keydown.enter="handleAddTag" v-model="tag" type="text" />
+      <div v-for="tag in tags" :key="tag" class="pill">
+        <span @click="handleDeleteTag(tag)">#{{ tag }}</span>
+      </div>
       <button>создать</button>
     </form>
   </div>
 </template>
 
 <script>
-export default {};
+import { ref } from "@vue/reactivity";
+export default {
+  setup() {
+    const title = ref("");
+    const body = ref("");
+    const tag = ref("");
+    const tags = ref([]);
+
+    const handleAddTag = () => {
+      if (!tags.value.includes(tag.value) && !tag.value.includes(" ")) {
+        tags.value.push(tag.value);
+        tag.value = "";
+      }
+      tag.value = "";
+    };
+
+    const handleSubmit = (item) => {
+      console.log(title.value);
+      console.log(body.value);
+      console.log(tag.value);
+    };
+
+    const handleDeleteTag = (item) => {
+      tags.value = tags.value.filter((tag) => tag !== item);
+    };
+
+    return {
+      title,
+      body,
+      tag,
+      tags,
+      handleSubmit,
+      handleAddTag,
+      handleDeleteTag,
+    };
+  },
+};
 </script>
 
 <style>
@@ -48,7 +86,7 @@ label::before {
   content: "";
   width: 100%;
   height: 100%;
-  background: #ff8800;
+  background: #6c3aea;
   position: absolute;
   top: 0;
   z-index: -1;
@@ -59,7 +97,7 @@ label::before {
 button {
   display: block;
   margin-top: 30px;
-  background: #ff8800;
+  background: #6c3aea;
   color: white;
   border: none;
   padding: 8px 16px;
