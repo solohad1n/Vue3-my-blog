@@ -19,6 +19,8 @@
 <script>
 import { ref } from "@vue/reactivity";
 import { useRouter } from "vue-router";
+import { firestore } from "../firebase/config";
+import { collection, addDoc } from "firebase/firestore";
 export default {
   setup() {
     const title = ref("");
@@ -43,11 +45,7 @@ export default {
         tags: tags.value,
       };
       try {
-        await fetch(`http://localhost:3000/posts`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newPost),
-        });
+        await addDoc(collection(firestore, "posts"), newPost);
         router.push("/");
       } catch (err) {
         error.value = err.message;
@@ -129,5 +127,9 @@ button {
   padding: 8px;
   border-radius: 20px;
   font-size: 14px;
+}
+.pill a {
+  text-decoration: none;
+  color: #444;
 }
 </style>
