@@ -134,4 +134,12 @@ button {
   text-decoration: none;
   color: #444;
 }
+@media screen and (max-width: 576px) {
+  form {
+    max-width: 300px;
+  }
+  label::before {
+    left: -20px;
+  }
+}
 </style>

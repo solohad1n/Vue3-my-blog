@@ -53,4 +53,14 @@ export default {
   left: -30px;
   transform: rotateZ(-1deg);
 }
+@media screen and (max-width: 576px) {
+  .post {
+    margin: 0 20px 30px;
+  }
+  .post a {
+    color: #444;
+    font-weight: 700;
+    text-decoration: none;
+  }
+}
 </style>

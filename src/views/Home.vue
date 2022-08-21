@@ -37,4 +37,10 @@ export default {
   grid-template-columns: 3fr 1fr;
   gap: 20px;
 }
+@media screen and (max-width: 576px) {
+  .grid {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+}
 </style>

@@ -34,4 +34,15 @@ header a.router-link-active {
   color: #444;
   font-weight: bold;
 }
+
+@media screen and (max-width: 576px) {
+  header {
+    flex-direction: column;
+  }
+  nav {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+  }
+}
 </style>
