@@ -20,7 +20,7 @@
 import { ref } from "@vue/reactivity";
 import { useRouter } from "vue-router";
 import { firestore } from "../firebase/config";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 export default {
   setup() {
     const title = ref("");
@@ -43,7 +43,9 @@ export default {
         title: title.value,
         body: body.value,
         tags: tags.value,
+        createdAt: serverTimestamp(),
       };
+
       try {
         await addDoc(collection(firestore, "posts"), newPost);
         router.push("/");
