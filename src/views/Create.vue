@@ -6,11 +6,18 @@
       <label>Контент:</label>
       <textarea v-model="body"></textarea>
       <label>Теги (Нажмите на Enter чтобы добавить тег)</label>
-      <input @keydown.enter.prevent="handleAddTag" v-model="tag" type="text" />
+      <div class="add-tag">
+        <input
+          @keydown.enter.prevent="handleAddTag"
+          v-model="tag"
+          type="text"
+        />
+        <span @click="handleAddTag">Добавить тег</span>
+      </div>
       <div v-for="tag in tags" :key="tag" class="pill">
         <span @click="handleDeleteTag(tag)">#{{ tag }}</span>
       </div>
-      <div v-if="error">{{ error }}</div>
+      <div class="error" v-if="error">{{ error }}</div>
       <button>создать</button>
     </form>
   </div>
@@ -31,9 +38,14 @@ export default {
     const error = ref(null);
 
     const handleAddTag = () => {
-      if (!tags.value.includes(tag.value) && !tag.value.includes(" ")) {
+      if (
+        !tags.value.includes(tag.value) &&
+        !tag.value.includes(" ") &&
+        tag.value
+      ) {
         tags.value.push(tag.value);
         tag.value = "";
+        error.value = "";
       }
       tag.value = "";
     };
@@ -47,6 +59,11 @@ export default {
       };
 
       try {
+        if (!tags.value.length) {
+          error.value = "Заполни поле тегиов!";
+          throw Error("Заполни поле тегиов!");
+        }
+
         await addDoc(collection(firestore, "posts"), newPost);
         router.push("/");
       } catch (err) {
@@ -133,6 +150,24 @@ button {
 .pill a {
   text-decoration: none;
   color: #444;
+}
+.error {
+  color: red;
+}
+.add-tag {
+  position: relative;
+}
+.add-tag span {
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: #6c3aea;
+  padding: 0.6rem;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.add-tag input {
+  padding-right: 30%;
 }
 @media screen and (max-width: 576px) {
   form {
