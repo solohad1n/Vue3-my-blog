@@ -1,16 +1,21 @@
 <template>
   <div class="post">
-    <router-link :to="{ name: 'Details', params: { id: post.id } }"
-      ><h3>{{ post.title }}</h3></router-link
-    >
-    <p>{{ bodyLimit }}</p>
-    <router-link
-      :to="{ name: 'Tags', params: { tag } }"
-      class="pill"
-      v-for="tag in post.tags"
-      :key="tag"
-      >#{{ tag }}</router-link
-    >
+    <div class="post-details">
+      <router-link :to="{ name: 'Details', params: { id: post.id } }"
+        ><h3>{{ post.title }}</h3></router-link
+      >
+      <p>{{ bodyLimit }}</p>
+      <div>
+        <router-link
+          :to="{ name: 'Tags', params: { tag } }"
+          class="pill"
+          v-for="tag in post.tags"
+          :key="tag"
+          >#{{ tag }}</router-link
+        >
+      </div>
+    </div>
+    <img class="post-img" v-if="post.imageUrl" :src="post.imageUrl" alt="" />
   </div>
 </template>
 
@@ -20,7 +25,7 @@ export default {
   props: ["post"],
   setup(props) {
     const bodyLimit = computed(() => {
-      return props.post.body.substring(0, 100) + "...";
+      return props.post.body.substring(0, 300) + "...";
     });
     return { bodyLimit };
   },
@@ -28,10 +33,23 @@ export default {
 </script>
 
 <style>
+.post-img {
+  max-height: 150px;
+  max-width: 150px;
+  margin-left: 10px;
+  padding: 25px 0 0 0;
+}
 .post {
-  margin: 0 40px 30px;
+  display: flex;
+  margin: 0 0px 30px;
   padding-bottom: 30px;
   border-bottom: 1px dashed #e7e7e7;
+}
+.post p {
+  line-height: 1.8;
+}
+.post-details {
+  padding-right: 15px;
 }
 .post h3 {
   display: inline-block;

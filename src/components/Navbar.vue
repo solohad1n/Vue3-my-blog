@@ -1,11 +1,13 @@
 <template>
-  <header>
-    <h1>Личный Блок</h1>
-    <nav>
-      <router-link :to="{ name: 'Home' }">Главная</router-link>
-      <router-link :to="{ name: 'Create' }">Создать Пост</router-link>
-    </nav>
-  </header>
+  <div class="container">
+    <header>
+      <h1>Личный Блок...</h1>
+      <nav>
+        <router-link :to="{ name: 'Home' }">Главная</router-link>
+        <router-link :to="{ name: 'Create' }">Создать Пост</router-link>
+      </nav>
+    </header>
+  </div>
 </template>
 
 <script>
@@ -18,11 +20,10 @@ header {
   justify-content: space-between;
   align-items: center;
   margin: 0 auto;
-  padding: 10px;
-  background: #8760e7;
+  border-bottom: 2px solid #8760e7;
 }
 header h1 {
-  color: #dfdfdf;
+  color: #8760e7;
   font-size: 48px;
 }
 header a {
@@ -31,7 +32,7 @@ header a {
   margin-left: 20px;
 }
 header a.router-link-active {
-  color: #444;
+  color: #8760e7;
   font-weight: bold;
 }
 

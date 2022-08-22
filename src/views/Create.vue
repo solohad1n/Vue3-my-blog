@@ -3,8 +3,13 @@
     <form @submit.prevent="handleSubmit">
       <label>Заголовок</label>
       <input v-model="title" type="text" required />
+
       <label>Контент:</label>
       <textarea v-model="body"></textarea>
+
+      <label>Загрузите картинку:</label>
+      <input @change="sendImage" type="file" />
+
       <label>Теги (Нажмите на Enter чтобы добавить тег)</label>
       <div class="add-tag">
         <input
@@ -28,6 +33,7 @@ import { ref } from "@vue/reactivity";
 import { useRouter } from "vue-router";
 import { firestore } from "../firebase/config";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { useStorage } from "@/composables/useStorage";
 export default {
   setup() {
     const title = ref("");
@@ -36,6 +42,12 @@ export default {
     const tags = ref([]);
     const router = useRouter();
     const error = ref(null);
+    const image = ref(null);
+    const { uploadImageToFirebase } = useStorage();
+
+    const sendImage = (event) => {
+      image.value = event.target.files[0];
+    };
 
     const handleAddTag = () => {
       if (
@@ -64,8 +76,17 @@ export default {
           throw Error("Заполни поле тегиов!");
         }
 
-        await addDoc(collection(firestore, "posts"), newPost);
-        router.push("/");
+        if (image.value !== null) {
+          const getImageUrl = await uploadImageToFirebase(image.value);
+          await addDoc(collection(firestore, "posts"), {
+            ...newPost,
+            imageUrl: getImageUrl,
+          });
+        } else {
+          await addDoc(collection(firestore, "posts"), newPost);
+        }
+
+        await router.push("/");
       } catch (err) {
         error.value = err.message;
       }
@@ -84,6 +105,7 @@ export default {
       handleAddTag,
       handleDeleteTag,
       error,
+      sendImage,
     };
   },
 };
