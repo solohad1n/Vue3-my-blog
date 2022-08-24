@@ -23,7 +23,8 @@
         <span @click="handleDeleteTag(tag)">#{{ tag }}</span>
       </div>
       <div class="error" v-if="error">{{ error }}</div>
-      <button>создать</button>
+      <button v-if="!isLoading">Cоздать</button>
+      <button v-else class="disabled" disabled>Идёт загрузка...</button>
     </form>
   </div>
 </template>
@@ -44,6 +45,7 @@ export default {
     const error = ref(null);
     const image = ref(null);
     const { uploadImageToFirebase } = useStorage();
+    const isLoading = ref(false);
 
     const sendImage = (event) => {
       image.value = event.target.files[0];
@@ -71,6 +73,7 @@ export default {
       };
 
       try {
+        isLoading.value = true;
         if (!tags.value.length) {
           error.value = "Заполни поле тегиов!";
           throw Error("Заполни поле тегиов!");
@@ -85,9 +88,10 @@ export default {
         } else {
           await addDoc(collection(firestore, "posts"), newPost);
         }
-
+        isLoading.value = false;
         await router.push("/");
       } catch (err) {
+        isLoading.value = false;
         error.value = err.message;
       }
     };
@@ -106,12 +110,17 @@ export default {
       handleDeleteTag,
       error,
       sendImage,
+      isLoading,
     };
   },
 };
 </script>
 
 <style>
+.disabled {
+  background-color: #eee;
+  color: #444;
+}
 form {
   max-width: 480px;
   margin: 0 auto;

@@ -37,7 +37,7 @@ export default {
   max-height: 150px;
   max-width: 150px;
   margin-left: 10px;
-  padding: 25px 0 0 0;
+  padding: 55px 0 0 0;
 }
 .post {
   display: flex;
@@ -74,6 +74,11 @@ export default {
 @media screen and (max-width: 576px) {
   .post {
     margin: 0 20px 30px;
+    flex-direction: column-reverse;
+  }
+  .post img {
+    margin-bottom: 25px;
+    width: 100%;
   }
   .post a {
     color: #444;
